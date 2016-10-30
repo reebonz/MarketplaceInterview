@@ -1,6 +1,7 @@
 ###################
 # compiled source #
 ###################
+
 *.com
 *.class
 *.dll
@@ -66,10 +67,11 @@ Thumbs.db
 *.[Cc]ache
 *[Rr]esharper*
 packages
-NuGet.exe
 _[Ss]cripts
 *.exe
 *.dll
 *.nupkg
 *.ncrunchsolution
 *.dot[Cc]over
+
+!Marketplace.Interview/.nuget/nuget.exe
