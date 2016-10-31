@@ -16,6 +16,6 @@ namespace Marketplace.Interview.Business.Shipping
         public abstract string GetDescription(LineItem lineItem, Basket.Basket basket);
 
         public abstract decimal GetAmount(LineItem lineItem, Basket.Basket basket);
-        public abstract decimal GetDiscount { get; set; }
+        //public abstract decimal GetDiscount { get; set; }
     }
 }

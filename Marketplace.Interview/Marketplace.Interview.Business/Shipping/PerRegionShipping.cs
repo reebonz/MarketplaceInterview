@@ -13,11 +13,11 @@ namespace Marketplace.Interview.Business.Shipping
             return string.Format("Shipping to {0}", lineItem.DeliveryRegion);
         }
 
-        public override decimal GetDiscount
-        {
-            get { return 0; }
-            set { }
-        }
+        //public override decimal GetDiscount
+        //{
+        //    get { return 0; }
+        //    set { }
+        //}
 
         public override decimal GetAmount(LineItem lineItem, Basket.Basket basket)
         {
