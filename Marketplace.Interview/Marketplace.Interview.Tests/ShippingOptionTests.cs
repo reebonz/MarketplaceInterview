@@ -94,5 +94,127 @@ namespace Marketplace.Interview.Tests
 
             Assert.That(basketShipping, Is.EqualTo(3.35m));
         }
+
+        [Test]
+        public void BasketShippingTotalDiscountTest()
+        {
+            var perRegionShippingOption = new PerRegionShipping()
+            {
+                PerRegionCosts = new[]
+                                                                       {
+                                                                           new RegionShippingCost()
+                                                                               {
+                                                                                   DestinationRegion =
+                                                                                       RegionShippingCost.Regions.UK,
+                                                                                   
+                                                                                   Amount = 1m
+                                                                               },
+                                                                           new RegionShippingCost()
+                                                                               {
+                                                                                   DestinationRegion =
+                                                                                       RegionShippingCost.Regions.Europe,
+                                                                                   Amount = 2m
+                                                                               }
+                                                                       },
+            };
+
+            var flatRateShippingOption = new FlatRateShipping { FlatRate = 3m };
+
+            var basket = new Basket()
+            {
+                LineItems = new List<LineItem>
+                                                 {
+                                                     new LineItem()
+                                                         {
+                                                             Id=1,
+                                                             DeliveryRegion = RegionShippingCost.Regions.UK,
+                                                             SupplierId=1,
+                                                             Shipping = perRegionShippingOption
+                                                         },
+                                                     new LineItem()
+                                                         {
+                                                             Id=2,
+                                                             DeliveryRegion = RegionShippingCost.Regions.UK,
+                                                             SupplierId=1,
+                                                             Shipping = perRegionShippingOption
+                                                         },
+                                                     new LineItem()
+                                                         {
+                                                             Id=3,
+                                                             DeliveryRegion = RegionShippingCost.Regions.Europe,
+                                                             Shipping = perRegionShippingOption
+                                                         },
+                                                     new LineItem() {Id=4,Shipping = flatRateShippingOption,SupplierId=2},
+                                                     new LineItem() {Id=5,Shipping = flatRateShippingOption,SupplierId=2},
+                                                 }
+            };
+
+            var calculator = new ShippingCalculator();
+
+            decimal basketShipping = calculator.CalculateShipping(basket);
+
+            Assert.That(basketShipping, Is.EqualTo(9m));
+        }
+
+        [Test]
+        public void BasketShippingTotalInclZeroTest()
+        {
+            var perRegionShippingOption = new PerRegionShipping()
+            {
+                PerRegionCosts = new[]
+                                                                       {
+                                                                           new RegionShippingCost()
+                                                                               {
+                                                                                   DestinationRegion =
+                                                                                       RegionShippingCost.Regions.UK,
+                                                                                   
+                                                                                   Amount = 0.3m
+                                                                               },
+                                                                           new RegionShippingCost()
+                                                                               {
+                                                                                   DestinationRegion =
+                                                                                       RegionShippingCost.Regions.Europe,
+                                                                                   Amount = 1m
+                                                                               }
+                                                                       },
+            };
+
+            var flatRateShippingOption = new FlatRateShipping { FlatRate = 2m };
+
+            var basket = new Basket()
+            {
+                LineItems = new List<LineItem>
+                                                 {
+                                                     new LineItem()
+                                                         {
+                                                             Id=1,
+                                                             DeliveryRegion = RegionShippingCost.Regions.UK,
+                                                             SupplierId=1,
+                                                             Shipping = perRegionShippingOption
+                                                         },
+                                                     new LineItem()
+                                                         {
+                                                             Id=2,
+                                                             DeliveryRegion = RegionShippingCost.Regions.UK,
+                                                             SupplierId=1,
+                                                             Shipping = perRegionShippingOption
+                                                         },
+                                                     new LineItem()
+                                                         {
+                                                             Id=3,
+                                                             DeliveryRegion = RegionShippingCost.Regions.Europe,
+                                                             Shipping = perRegionShippingOption
+                                                         },
+                                                     new LineItem() {Id=4,Shipping = flatRateShippingOption,SupplierId=2},
+                                                     new LineItem() {Id=5,Shipping = flatRateShippingOption,SupplierId=2},
+                                                 }
+            };
+
+            var calculator = new ShippingCalculator();
+
+            decimal basketShipping = calculator.CalculateShipping(basket);
+
+            Assert.That(basketShipping, Is.EqualTo(4.8m));
+        }
     }
 }

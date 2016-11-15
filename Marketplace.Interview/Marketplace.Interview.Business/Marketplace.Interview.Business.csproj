@@ -57,6 +57,7 @@
     <Compile Include="Basket\Basket.cs" />
     <Compile Include="Basket\BasketOperationBase.cs" />
     <Compile Include="Basket\GetBasketQuery.cs" />
+    <Compile Include="Constant\ConfigConst.cs" />
     <Compile Include="Core\ICommand.cs" />
     <Compile Include="Core\IQuery.cs" />
     <Compile Include="Core\IWorkflow.cs" />
@@ -65,8 +66,11 @@
     <Compile Include="IEnumerableExtensions.cs" />
     <Compile Include="Basket\IShippingCalculator.cs" />
     <Compile Include="Basket\RemoveFromBasketCommand.cs" />
+    <Compile Include="Security\AppConfigs.cs" />
     <Compile Include="Shipping\FlatRateShipping.cs" />
+    <Compile Include="Shipping\PerTypeShipping.cs" />
     <Compile Include="Shipping\PerRegionShipping.cs" />
+    <Compile Include="Shipping\TypeShippingCost.cs" />
     <Compile Include="Shipping\RegionShippingCost.cs" />
     <Compile Include="Shipping\ShippingBase.cs" />
     <Compile Include="Commands.cs" />

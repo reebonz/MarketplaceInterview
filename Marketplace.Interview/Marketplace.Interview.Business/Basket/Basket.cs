@@ -20,7 +20,19 @@ namespace Marketplace.Interview.Business.Basket
         public string DeliveryRegion { get; set; }
         public int Id { get; set; }
 
-        public decimal ShippingAmount { get; set; }
+        private decimal _shippingAmount;
+
+        public decimal ShippingAmount 
+        {
+            get 
+            {
+                if (_shippingAmount > default(decimal))
+                    return _shippingAmount;
+                else
+                    return default(decimal);
+            }
+            set { _shippingAmount = value; }
+        }
 
         public string ShippingDescription { get; set; }
     }
