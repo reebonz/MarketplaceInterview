@@ -13,12 +13,6 @@ namespace Marketplace.Interview.Business.Shipping
         {
             return FlatRate;
         }
-        
-        public override decimal GetDiscount
-        {
-            get { return 0; }
-            set { }
-        }
 
         public decimal FlatRate { get; set; }
     }
