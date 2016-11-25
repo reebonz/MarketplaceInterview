@@ -33,6 +33,32 @@ namespace Marketplace.Interview.Tests
                             new RegionShippingCost{DestinationRegion = RegionShippingCost.Regions.RestOfTheWorld, Amount = 2m},
                         }
                     }
+                },
+                {
+                    "PerRegionDiscounted", new PerRegionShippingDiscounted
+                    {
+                        PerRegionCostsDiscounted = new List<RegionShippingCostDiscounted>
+                        {
+                            new RegionShippingCostDiscounted{
+                                DestinationRegion = RegionShippingCost.Regions.UK,
+                                Amount = .5m,
+                                DiscountAmount = .5m,
+                                MinSameOriginItems = 2
+                            },
+                            new RegionShippingCostDiscounted{
+                                DestinationRegion = RegionShippingCost.Regions.Europe,
+                                Amount = 1m,
+                                DiscountAmount = .5m,
+                                MinSameOriginItems = 2
+                            },
+                            new RegionShippingCostDiscounted{
+                                DestinationRegion = RegionShippingCost.Regions.RestOfTheWorld,
+                                Amount = 2m,
+                                DiscountAmount = .5m,
+                                MinSameOriginItems = 2
+                            }
+                        }
+                    }
                 }
             };
 

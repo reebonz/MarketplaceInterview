@@ -9,6 +9,17 @@ namespace Marketplace.Interview.Business.Basket
     {
         public List<LineItem> LineItems { get; set; }
         public decimal Shipping { get; set; }
+
+        public int ItemCountWith(ShippingBase shippingType, string DeliveryRegion, int SupplierId)
+        {
+            var count =  (from li in LineItems
+                    where li.DeliveryRegion == DeliveryRegion
+                    && li.Shipping.GetType() == shippingType.GetType()
+                    && li.SupplierId == SupplierId
+                    select li.Amount).Count();
+
+            return count;
+        }
     }
 
     public class LineItem
