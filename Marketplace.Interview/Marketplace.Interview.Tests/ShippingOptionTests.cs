@@ -47,6 +47,35 @@ namespace Marketplace.Interview.Tests
         }
 
         [Test]
+        public void DiscountedPerRegionShippingOptionTest()
+        {
+            var discountedPerRegionShippingOption = new DiscountedPerRegionShipping()
+            {
+                PerRegionCosts = new[]
+                                                                       {
+                                                                           new RegionShippingCost()
+                                                                               {
+                                                                                   DestinationRegion =
+                                                                                       RegionShippingCost.Regions.UK,
+                                                                                   Amount = .5m
+                                                                               },
+                                                                           new RegionShippingCost()
+                                                                               {
+                                                                                   DestinationRegion =
+                                                                                       RegionShippingCost.Regions.Europe,
+                                                                                   Amount = 1.25m
+                                                                               }
+                                                                       },
+            };
+
+            var shippingAmount = discountedPerRegionShippingOption.GetAmount(new LineItem() { DeliveryRegion = RegionShippingCost.Regions.Europe }, new Basket());
+            Assert.That(shippingAmount, Is.EqualTo(1.25m));
+
+            shippingAmount = discountedPerRegionShippingOption.GetAmount(new LineItem() { DeliveryRegion = RegionShippingCost.Regions.UK }, new Basket());
+            Assert.That(shippingAmount, Is.EqualTo(.5m));
+        }
+
+        [Test]
         public void BasketShippingTotalTest()
         {
             var perRegionShippingOption = new PerRegionShipping()
@@ -68,6 +97,25 @@ namespace Marketplace.Interview.Tests
                                                                        },
             };
 
+            var discountedPerRegionShippingOption = new DiscountedPerRegionShipping()
+            {
+                PerRegionCosts = new[]
+                                                                      {
+                                                                           new RegionShippingCost()
+                                                                               {
+                                                                                   DestinationRegion =
+                                                                                       RegionShippingCost.Regions.UK,
+                                                                                   Amount = .5m
+                                                                               },
+                                                                           new RegionShippingCost()
+                                                                               {
+                                                                                   DestinationRegion =
+                                                                                       RegionShippingCost.Regions.Europe,
+                                                                                   Amount = 1.25m
+                                                                               }
+                                                                       },
+            };
+
             var flatRateShippingOption = new FlatRateShipping {FlatRate = 1.1m};
 
             var basket = new Basket()
@@ -84,6 +132,26 @@ namespace Marketplace.Interview.Tests
                                                              DeliveryRegion = RegionShippingCost.Regions.Europe,
                                                              Shipping = perRegionShippingOption
                                                          },
+                                                     new LineItem()
+                                                         {
+                                                             DeliveryRegion = RegionShippingCost.Regions.UK,
+                                                             Shipping = discountedPerRegionShippingOption
+                                                         },
+                                                     new LineItem()
+                                                         {
+                                                             DeliveryRegion = RegionShippingCost.Regions.UK,
+                                                             Shipping = discountedPerRegionShippingOption
+                                                         },
+                                                     new LineItem()
+                                                         {
+                                                             DeliveryRegion = RegionShippingCost.Regions.UK,
+                                                             Shipping = discountedPerRegionShippingOption
+                                                         },
+                                                     new LineItem()
+                                                         {
+                                                             DeliveryRegion = RegionShippingCost.Regions.Europe,
+                                                             Shipping = discountedPerRegionShippingOption
+                                                         },
                                                      new LineItem() {Shipping = flatRateShippingOption},
                                                  }
                              };
@@ -92,7 +160,7 @@ namespace Marketplace.Interview.Tests
 
             decimal basketShipping = calculator.CalculateShipping(basket);
 
-            Assert.That(basketShipping, Is.EqualTo(3.35m));
+            Assert.That(basketShipping, Is.EqualTo(5.6m));
         }
     }
 }

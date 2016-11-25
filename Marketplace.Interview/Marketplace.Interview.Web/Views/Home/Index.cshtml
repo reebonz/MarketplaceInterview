@@ -33,8 +33,11 @@
     }
     </tbody>
     </table>
+    <p>
+        Total Shipping Amount After Discount
+        @Model.Basket.Shipping
+    </p>
     </fieldset>
-
     <fieldset>
     <h2>Add new item:</h2>
     @using (Html.BeginForm("AddItem", "Home", FormMethod.Post))
