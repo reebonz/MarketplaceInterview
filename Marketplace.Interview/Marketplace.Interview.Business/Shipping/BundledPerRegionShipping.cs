@@ -4,8 +4,8 @@ using Marketplace.Interview.Business.Basket;
 
 namespace Marketplace.Interview.Business.Shipping
 {
-    public class PerRegionShipping : BasePerRegionShipping
+    public class BundledPerRegionShipping : BasePerRegionShipping
     {
-       
+        public static decimal DiscountAmount = 0.5M;
     }
 }
