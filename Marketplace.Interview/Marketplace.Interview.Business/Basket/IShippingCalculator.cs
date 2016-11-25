@@ -11,6 +11,7 @@ namespace Marketplace.Interview.Business.Basket
     {
         public decimal CalculateShipping(Basket basket)
         {
+
             foreach (var lineItem in basket.LineItems)
             {
                 lineItem.ShippingAmount = lineItem.Shipping.GetAmount(lineItem, basket);

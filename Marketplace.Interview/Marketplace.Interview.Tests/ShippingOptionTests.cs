@@ -47,6 +47,55 @@ namespace Marketplace.Interview.Tests
         }
 
         [Test]
+        public void CustomShippingTest()
+        {
+            var customShippingOption = new CustomRegionShipping()
+            {
+                DiscountValue=0.5m,
+                PerRegionCosts = new[]
+                                                                      {
+                                                                           new RegionShippingCost()
+                                                                               {
+                                                                                   DestinationRegion =
+                                                                                       RegionShippingCost.Regions.UK,
+                                                                                   Amount = .75m
+                                                                               },
+                                                                           new RegionShippingCost()
+                                                                               {
+                                                                                   DestinationRegion =
+                                                                                       RegionShippingCost.Regions.Europe,
+                                                                                   Amount = 1.5m
+                                                                               }
+                                                                       },
+            };
+
+            var basket = new Basket()
+            {
+                LineItems = new List<LineItem>
+                                                 {
+                                                     new LineItem()
+                                                         {
+                                                             DeliveryRegion = RegionShippingCost.Regions.UK,
+                                                             Shipping = customShippingOption,
+                                                             Id = 1
+                                                         },
+                                                     new LineItem()
+                                                         {
+                                                             DeliveryRegion = RegionShippingCost.Regions.UK,
+                                                             Shipping = customShippingOption,
+                                                             Id = 2
+                                                         }
+                                                 }
+            };
+
+            var shippingAmount = customShippingOption.GetAmount(basket.LineItems[0], basket);
+            Assert.That(shippingAmount, Is.EqualTo(.25m));
+
+            shippingAmount = customShippingOption.GetAmount(basket.LineItems[1], basket);
+            Assert.That(shippingAmount, Is.EqualTo(0.25m));
+        }
+
+        [Test]
         public void BasketShippingTotalTest()
         {
             var perRegionShippingOption = new PerRegionShipping()
