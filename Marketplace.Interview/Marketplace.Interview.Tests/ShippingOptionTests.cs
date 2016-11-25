@@ -11,7 +11,7 @@ namespace Marketplace.Interview.Tests
         [Test]
         public void FlatRateShippingOptionTest()
         {
-            var flatRateShippingOption = new FlatRateShipping {FlatRate = 1.5m};
+            var flatRateShippingOption = new FlatRateShipping { FlatRate = 1.5m };
             var shippingAmount = flatRateShippingOption.GetAmount(new LineItem(), new Basket());
 
             Assert.That(shippingAmount, Is.EqualTo(1.5m), "Flat rate shipping not correct.");
@@ -21,8 +21,8 @@ namespace Marketplace.Interview.Tests
         public void PerRegionShippingOptionTest()
         {
             var perRegionShippingOption = new PerRegionShipping()
-                                              {
-                                                  PerRegionCosts = new[]
+            {
+                PerRegionCosts = new[]
                                                                        {
                                                                            new RegionShippingCost()
                                                                                {
@@ -37,13 +37,65 @@ namespace Marketplace.Interview.Tests
                                                                                    Amount = 1.5m
                                                                                }
                                                                        },
-                                              };
+            };
 
-            var shippingAmount = perRegionShippingOption.GetAmount(new LineItem() {DeliveryRegion = RegionShippingCost.Regions.Europe}, new Basket());
+            var shippingAmount = perRegionShippingOption.GetAmount(new LineItem() { DeliveryRegion = RegionShippingCost.Regions.Europe }, new Basket());
             Assert.That(shippingAmount, Is.EqualTo(1.5m));
 
-            shippingAmount = perRegionShippingOption.GetAmount(new LineItem() { DeliveryRegion = RegionShippingCost.Regions.UK}, new Basket());
+            shippingAmount = perRegionShippingOption.GetAmount(new LineItem() { DeliveryRegion = RegionShippingCost.Regions.UK }, new Basket());
             Assert.That(shippingAmount, Is.EqualTo(.75m));
+        }
+
+        [Test]
+        public void DiscountShippingOptionTest()
+        {
+            var discountShippingOption = new DiscountShipping()
+            {
+                PerRegionCosts = new[]
+                                                                       {
+                                                                           new RegionShippingCost()
+                                                                               {
+                                                                                   DestinationRegion =
+                                                                                       RegionShippingCost.Regions.UK,
+                                                                                   Amount = .75m
+                                                                               },
+                                                                           new RegionShippingCost()
+                                                                               {
+                                                                                   DestinationRegion =
+                                                                                       RegionShippingCost.Regions.Europe,
+                                                                                   Amount = 1.5m
+                                                                               }
+                                                                       },
+            };
+
+            var basket = new Basket()
+            {
+                LineItems = new List<LineItem>
+                                                 {
+                                                     new LineItem()
+                                                         {
+                                                             DeliveryRegion = RegionShippingCost.Regions.UK,
+                                                             Shipping = discountShippingOption,
+                                                             SupplierId = 99
+                                                         },
+                                                     new LineItem()
+                                                         {
+                                                             DeliveryRegion = RegionShippingCost.Regions.UK,
+                                                             Shipping = discountShippingOption,
+                                                             SupplierId = 99
+                                                         },
+                                                }
+            };
+
+            var calculator = new ShippingCalculator();
+
+            decimal basketShipping = calculator.CalculateShipping(basket);
+
+            var shippingAmount = discountShippingOption.GetAmount(basket.LineItems[0], basket);
+            Assert.That(shippingAmount, Is.EqualTo(.25m));
+
+            shippingAmount = discountShippingOption.GetAmount(basket.LineItems[1], basket);
+            Assert.That(shippingAmount, Is.EqualTo(.25m));
         }
 
         [Test]
