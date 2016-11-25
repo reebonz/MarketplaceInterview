@@ -1,0 +1,28 @@
+Improving the solution with Unit Of Work pattern.
+
+In order to efficiently implement the UOW pattern we should use it in conjunction with the Repository Pattern.
+
+One way to do it is to create a UOW class that implements the operations:
+- begin transaction
+- commit
+- rollback
+
+In the base controller of our application we would do the following:
+- call begin transaction in the before action handler
+- call commit (with rollback in case of failiure) in the after action handler
+
+For the Repository Pattern we could create a generic repository class that implements the CRUD operations
+(using the UOW class so without commiting the changes to the database). We instantiate each generic repository with
+the coresponding entity class (simple object mapping the fields).
+
+To keep things tidy we could also create a model object i.e. refactoring the Basket classes so that
+the BasketModel would encapsulate the following:
+- an instance of the BasketRepository to handle CRUD to wich we pass the singleton UOW instance
+- any other model methods that implement the business logic (running the commands, queries etc)
+
+Thus in the end for the Basket we would have the following classes:
+- BasketEntity - simple object containing the fields
+- GenericRepository<T> -> BasketRepository - implementing CRUD through the singleton UOW object
+- BasketModel - implementing CRUD through BasketRepository and business logic through the commands
+- the singleton UOW will handle the persistence / rollback in the before / after action handlers of the controller
+- in the controller we use the BasketModel object to perform all the operations
