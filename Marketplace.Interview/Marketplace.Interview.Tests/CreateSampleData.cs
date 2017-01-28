@@ -33,7 +33,20 @@ namespace Marketplace.Interview.Tests
                             new RegionShippingCost{DestinationRegion = RegionShippingCost.Regions.RestOfTheWorld, Amount = 2m},
                         }
                     }
+                },
+                //Added by Kenny Loo
+                {
+                    "ByShip", new  ShippingByShip
+                    {
+                        ShippingByShipCost = new List<RegionShippingCost>
+                        {
+                            new RegionShippingCost{DestinationRegion = RegionShippingCost.Regions.UK, Amount = .1m},
+                            new RegionShippingCost{DestinationRegion = RegionShippingCost.Regions.Europe, Amount = .2m},
+                            new RegionShippingCost{DestinationRegion = RegionShippingCost.Regions.RestOfTheWorld, Amount = .3m},
+                        }
+                    }
                 }
+                //End
             };
 
             var ser = SerializationHelper.DataContractSerialize(shippings);
