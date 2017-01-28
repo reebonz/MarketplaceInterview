@@ -13,7 +13,25 @@ namespace Marketplace.Interview.Business.Basket
         {
             foreach (var lineItem in basket.LineItems)
             {
-                lineItem.ShippingAmount = lineItem.Shipping.GetAmount(lineItem, basket);
+                //Added by Kenny Loo
+                decimal deductAmt = (decimal)0.5;
+
+                var duplicate = from d in basket.LineItems
+                                where d.DeliveryRegion == lineItem.DeliveryRegion && d.SupplierId == lineItem.SupplierId && d.Shipping.GetType().Name.Equals(lineItem.Shipping.GetType().Name.ToString())
+                                group d by new { d.Shipping, d.SupplierId, d.DeliveryRegion }
+                                    into g
+                                    select g;
+
+                if (duplicate.Count() > 1)
+                {
+                    lineItem.ShippingAmount = lineItem.Shipping.GetAmount(lineItem, basket) - deductAmt;
+                }
+                else
+                {
+                    lineItem.ShippingAmount = lineItem.Shipping.GetAmount(lineItem, basket);
+                }
+                // End
+               
                 lineItem.ShippingDescription = lineItem.Shipping.GetDescription(lineItem, basket);
             }
 
