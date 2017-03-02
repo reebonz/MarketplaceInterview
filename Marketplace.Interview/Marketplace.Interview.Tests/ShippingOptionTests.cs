@@ -94,5 +94,94 @@ namespace Marketplace.Interview.Tests
 
             Assert.That(basketShipping, Is.EqualTo(3.35m));
         }
+
+        [Test]
+        public void NewShippingOptionTest_Scenario_ShouldDeductedShipping()
+        {
+            var newShippingOption = NewShippingOption_InitArrange();
+
+            var basket = new Basket
+            {
+                LineItems = new List<LineItem>
+                {
+                    new LineItem
+                    {
+                        Id = 1,
+                        SupplierId = 1,
+                        DeliveryRegion = RegionShippingCost.Regions.Europe,
+                        Shipping = newShippingOption
+                    },
+                    new LineItem
+                    {
+                        Id = 2,
+                        SupplierId = 1,
+                        DeliveryRegion = RegionShippingCost.Regions.Europe,
+                        Shipping = newShippingOption
+                    }
+                }
+            };
+
+            var shippingAmount = newShippingOption.GetAmount(basket.LineItems[0], basket);
+            Assert.That(shippingAmount, Is.EqualTo(.5m));
+
+            shippingAmount = newShippingOption.GetAmount(basket.LineItems[1], basket);
+            Assert.That(shippingAmount, Is.EqualTo(.5m));
+        }
+
+        [Test]
+        public void NewShippingOptionTest_Scenario_ShouldNotDeductedShipping()
+        {
+            var newShippingOption = NewShippingOption_InitArrange();
+
+            var basket = new Basket
+            {
+                LineItems = new List<LineItem>
+                {
+                    new LineItem
+                    {
+                        Id = 1,
+                        SupplierId = 1,
+                        DeliveryRegion = RegionShippingCost.Regions.UK,
+                        Shipping = newShippingOption
+                    },
+                    new LineItem
+                    {
+                        Id = 2,
+                        SupplierId = 1,
+                        DeliveryRegion = RegionShippingCost.Regions.Europe,
+                        Shipping = newShippingOption
+                    }
+                }
+            };
+
+            var shippingAmount = newShippingOption.GetAmount(basket.LineItems[0], basket);
+            Assert.That(shippingAmount, Is.EqualTo(0.5m));
+
+            shippingAmount = newShippingOption.GetAmount(basket.LineItems[1], basket);
+            Assert.That(shippingAmount, Is.EqualTo(1m));
+        }
+
+        private static NewShippingOption NewShippingOption_InitArrange()
+        {
+            var newShippingOption = new NewShippingOption
+            {
+                PerRegionCosts = new[]
+                {
+                    new RegionShippingCost
+                    {
+                        DestinationRegion = RegionShippingCost.Regions.UK,
+                        Amount = 0.5m
+                    },
+                    new RegionShippingCost
+                    {
+                        DestinationRegion = RegionShippingCost.Regions.Europe,
+                        Amount = 1m
+                    }
+                },
+                Discount = 0.5m
+            };
+
+            return newShippingOption;
+        }
     }
 }
