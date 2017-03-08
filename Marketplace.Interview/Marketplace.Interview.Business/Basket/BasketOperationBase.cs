@@ -5,27 +5,16 @@ using Marketplace.Interview.Business.Core;
 
 namespace Marketplace.Interview.Business.Basket
 {
-    public abstract class BasketOperationBase
+    public abstract class BasketOperationBase: UnitOfWork<Basket>
     {
-        private static readonly string file = Path.Combine(Environment.GetEnvironmentVariable("temp"), "basket.xml");
-
         protected Basket GetBasket()
         {
-            if (!File.Exists(file))
-                return new Basket {LineItems = new List<LineItem>(),};
-
-            using (var sr = new StreamReader(file))
-            {
-                return SerializationHelper.DataContractDeserialize<Basket>(sr.ReadToEnd());
-            }
+            return GetAll();
         }
 
         protected void SaveBasket(Basket basket)
         {
-            using (var sw = new StreamWriter(file, false))
-            {
-                sw.Write(SerializationHelper.DataContractSerialize(basket));
-            }
+            Commit(basket);
         }
     }
 }
