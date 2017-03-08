@@ -45,37 +45,6 @@ namespace Marketplace.Interview.Tests
             shippingAmount = perRegionShippingOption.GetAmount(new LineItem() { DeliveryRegion = RegionShippingCost.Regions.UK}, new Basket());
             Assert.That(shippingAmount, Is.EqualTo(.75m));
         }
-        //HuyDP
-        [Test]
-        public void NewChoiceShippingOptionTest()
-        {
-            var newChoiceShippingOption = new NewChoiceShipping()
-            {
-                NewChoiceCosts = new[]
-                                                                       {
-                                                                           new NewChoiceShippingCost()
-                                                                               {
-                                                                                   DestinationRegion =
-                                                                                       NewChoiceShippingCost.Regions.UK,
-                                                                                   Amount = .5m
-                                                                               },
-                                                                           new NewChoiceShippingCost()
-                                                                               {
-                                                                                   DestinationRegion =
-                                                                                       NewChoiceShippingCost.Regions.Europe,
-                                                                                   Amount = 1.0m
-                                                                               }
-                                                                       },
-            };
-
-            var shippingAmount = newChoiceShippingOption.GetAmount(new LineItem() { DeliveryRegion = NewChoiceShippingCost.Regions.Europe }, new Basket());
-            Assert.That(shippingAmount, Is.EqualTo(1.0m));
-
-            shippingAmount = newChoiceShippingOption.GetAmount(new LineItem() { DeliveryRegion = NewChoiceShippingCost.Regions.UK }, new Basket());
-            Assert.That(shippingAmount, Is.EqualTo(0.5m));
-        }
-
-        //End-HuyDP
 
         [Test]
         public void BasketShippingTotalTest()
@@ -88,36 +57,16 @@ namespace Marketplace.Interview.Tests
                                                                                {
                                                                                    DestinationRegion =
                                                                                        RegionShippingCost.Regions.UK,
-                                                                                   Amount =0.5m
+                                                                                   Amount = .75m
                                                                                },
                                                                            new RegionShippingCost()
                                                                                {
                                                                                    DestinationRegion =
                                                                                        RegionShippingCost.Regions.Europe,
-                                                                                   Amount = 1.0m
+                                                                                   Amount = 1.5m
                                                                                }
                                                                        },
             };
-            //HuyDP
-            var newChoiceShippingOption = new NewChoiceShipping()
-            {
-                NewChoiceCosts = new[]
-                                                                       {
-                                                                           new NewChoiceShippingCost()
-                                                                               {
-                                                                                   DestinationRegion =
-                                                                                       NewChoiceShippingCost.Regions.UK,
-                                                                                   Amount = .5m
-                                                                               },
-                                                                           new NewChoiceShippingCost()
-                                                                               {
-                                                                                   DestinationRegion =
-                                                                                       NewChoiceShippingCost.Regions.Europe,
-                                                                                   Amount = 1.0m
-                                                                               }
-                                                                       },
-            };
-            //End-HuyDP
 
             var flatRateShippingOption = new FlatRateShipping {FlatRate = 1.1m};
 
@@ -136,23 +85,6 @@ namespace Marketplace.Interview.Tests
                                                              Shipping = perRegionShippingOption
                                                          },
                                                      new LineItem() {Shipping = flatRateShippingOption},
-                                                     //HuyDP
-                                                    new LineItem()
-                                                         {
-                                                             DeliveryRegion = NewChoiceShippingCost.Regions.UK,
-                                                             Shipping = newChoiceShippingOption
-                                                         },
-                                                     new LineItem()
-                                                         {
-                                                             DeliveryRegion = NewChoiceShippingCost.Regions.Europe,
-                                                             Shipping = newChoiceShippingOption
-                                                         },
-                                                     new LineItem()
-                                                         {
-                                                             DeliveryRegion = NewChoiceShippingCost.Regions.Europe,
-                                                             Shipping = newChoiceShippingOption
-                                                         },
-                                                     //End-HuyDP
                                                  }
                              };
 
@@ -160,7 +92,7 @@ namespace Marketplace.Interview.Tests
 
             decimal basketShipping = calculator.CalculateShipping(basket);
 
-            Assert.That(basketShipping, Is.EqualTo(4.6m));
+            Assert.That(basketShipping, Is.EqualTo(3.35m));
         }
     }
 }
