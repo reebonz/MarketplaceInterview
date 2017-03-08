@@ -10,7 +10,7 @@ namespace Marketplace.Interview.Business.Shipping
     {
         public static IEnumerable<Type> KnownTypes()
         {
-            return new[] {typeof (FlatRateShipping), typeof (PerRegionShipping), typeof(NewChoiceShipping) };
+            return new[] {typeof (FlatRateShipping), typeof (PerRegionShipping)};
         }
         
         public abstract string GetDescription(LineItem lineItem, Basket.Basket basket);
